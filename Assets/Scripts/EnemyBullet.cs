@@ -13,6 +13,8 @@ public class EnemyBullet : MonoBehaviour
     public float speed;
     public int damage;
 
+    public GameObject deathEffect;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,9 @@ public class EnemyBullet : MonoBehaviour
         else
         {
             Destroy(gameObject);
-        }        
+            Instantiate(deathEffect, transform.position, transform.rotation);
+
+        }
     }
     public void OnTriggerEnter2D(Collider2D collision)
     {
@@ -39,6 +43,8 @@ public class EnemyBullet : MonoBehaviour
         {
             playerScript.TakeDamage(damage);
             Destroy(gameObject);
+            Instantiate(deathEffect, transform.position, transform.rotation);
+
         }
     }
 }

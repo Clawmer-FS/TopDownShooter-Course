@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
@@ -22,13 +23,19 @@ public class WaveSpawner : MonoBehaviour
     private int currentWaveIndex;
     private Transform player;
 
-    private bool finishedSpawning;
+    public GameObject boss;
+    public Transform bossSpwanPoint;
 
+    private bool finishedSpawning;
+    public Text textWave;
+
+    public GameObject healthBar;
 
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         StartCoroutine(StartNextWave(currentWaveIndex));
+        textWave.text = "Wave: " + (currentWaveIndex+1) + " / " + waves.Length;
     }
 
     private void Update()
@@ -40,10 +47,13 @@ public class WaveSpawner : MonoBehaviour
             {
                 currentWaveIndex++;
                 StartCoroutine(StartNextWave(currentWaveIndex));
+                textWave.text = "Wave: " + (currentWaveIndex+1) + " / " + waves.Length;
             }    
             else
             {
-                Debug.Log("GAME FINISH");
+                Instantiate(boss, bossSpwanPoint.position, bossSpwanPoint.rotation);
+                healthBar.SetActive(true);
+                textWave.text = "Wave: Boss";
             }
         }
     }

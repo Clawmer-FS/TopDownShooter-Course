@@ -12,12 +12,15 @@ public class Projectile : MonoBehaviour
     
     public GameObject explotion;
 
+    public GameObject soundObject;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         Invoke("DestroyProjectile", lifeTime);
+        Instantiate(soundObject, transform.position, transform.rotation);
     }
 
     // Update is called once per frame
@@ -37,6 +40,11 @@ public class Projectile : MonoBehaviour
         if(collision.tag == "Enemy")
         {
             collision.GetComponent<Enemy>().TakeDamage(damage);
+            DestroyProjectile();
+        }
+        if (collision.tag == "Boss")
+        {
+            collision.GetComponent<Boss>().TakeDamage(damage);
             DestroyProjectile();
         }
     }

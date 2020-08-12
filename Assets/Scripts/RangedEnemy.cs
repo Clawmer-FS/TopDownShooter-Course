@@ -31,7 +31,7 @@ public class RangedEnemy : Enemy
             }
             else
             {
-                transform.position = Vector2.MoveTowards(transform.position, player.position, -speed * Time.deltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, player.position /2 , -speed * Time.deltaTime);
             }
         }
 

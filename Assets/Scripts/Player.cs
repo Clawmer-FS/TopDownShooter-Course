@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -14,7 +15,14 @@ public class Player : MonoBehaviour
 
     private Animator anim;
 
-    public float health;
+    public int health;
+    public Image[] hearts;
+    public Sprite fullHeart;
+    public Sprite emptyHeart;
+    
+    private Animator camAnim;
+
+    private SceneTransition sceneTransition;
 
 
     // Start is called before the first frame update
@@ -22,6 +30,8 @@ public class Player : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        camAnim = Camera.main.GetComponent<Animator>();
+        sceneTransition = FindObjectOfType<SceneTransition>();
     }
 
     // Update is called once per frame
@@ -46,16 +56,46 @@ public class Player : MonoBehaviour
     }
     public void TakeDamage(int damageAmount)
     {
+        camAnim.SetTrigger("shake");
         health -= damageAmount;
+        UpdateHeatlhUI(health);
         if (health <= 0)
         {
             Destroy(this.gameObject);
+            sceneTransition.LoadScene("Lose");
         }
+    }
+     public void Healing(int HealAmmount)
+    {
+        if (health < hearts.Length)
+        {
+            health += HealAmmount;
+        }
+        else
+        {
+            health = hearts.Length;
+        }
+        UpdateHeatlhUI(health);
     }
 
     public void ChangeWeapon(Weapon weaponToEquip)
     {
         Destroy(GameObject.FindGameObjectWithTag("Weapon"));
         Instantiate(weaponToEquip, transform.position, transform.rotation, transform);
+    }
+
+    public void UpdateHeatlhUI(int currentHealth)
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < currentHealth)
+            {
+                hearts[i].sprite = fullHeart;
+            }
+            else
+            {
+                hearts[i].sprite = emptyHeart;
+            }
+        }
     }
 }
